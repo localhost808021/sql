@@ -30,8 +30,21 @@ Step 2: Enter a plaintext
 Step 4: Using RC4 Decryption
 2.2) Use Cain and Abel for cracking Windows account password using Dictionary attack and to decode wireless network passwords 
 RESULT:
+OPEN CAIN AND ABEL
+Go to Tools
+Click on HASH Calculator
+Type password
+Then Calculate
+copy the MD5 HASH CODE
+Go to Cracker Select MD5 
+Click on + PASTE the HASH Code
+Right Click on the hash code select DICTIONARY ATTACK
+Right Click Add the Wordlist CLICK START
+you will get password Under PASSWORD
+
  2.1) Use CryptTool to encrypt and decrypt passwords using RC4 algorithm. 
 Step 1: Open CryptTool take plantext.
+
 
 
 
@@ -66,6 +79,17 @@ PING:,IPCONFIG:,NETSTAT
 
 3.2) Perform ARP Poisoning in Windows . 
 Step 1 : Open Cain and abel tool
+ARP POSINING
+Go to Win7
+Open Windows powershell type command "netsh int ip set global taskoffload=disable"
+then open network connections
+Right click the local connection
+go to properties uncheck the IPv6
+double click IPv4 go to advance<DNS<check the USE THIS CONNECTION DNS last option click ok
+Open Cian Able>start/stop sniffer
+go to sniffer click + click ok
+Click ARP at bottom>click + select Address on both side>click ok
+Then start the ARP beside START/STOP sniffer
 ************************************************************************************************
 PRACNO4:
 
