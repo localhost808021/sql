@@ -1,0 +1,155 @@
+MONGO:
+Introduction to NOSQL using MongoDB. Perform the following:
+
+Create a database Institution, create a collection Staff and Insert ten documents in it with fields: empid, empname, 
+salary and designation.
+1.	Display all documents in Staff and display only empid and designation.db
+2.	Sort the documents in descending order of Salary
+3.	Display employee with designation with “Manager” or salary greater than Rs. 50,000/-.
+4.	Update the salary of all employees with designation as “Accountant” to Rs.45000.
+5.	Remove the documents of employees whose salary is greater than Rs100000.
+
+
+mongod.exe --dbpath="E:\data"
+mongo.exe(Open another command prompt)
+CODE:
+use Institution
+show dbs
+
+db.Staff.insertOne({_id:1,"empname":"Sowmya","salary":40000,"designation":"Manager"});
+db.Staff.find({}).pretty()
+db.Staff.insertMany([
+{_id:2,"empname":"Sanjana","salary":45000,"designation":"Clerk"},
+{_id:3,"empname":"Trupti","salary":35000,"designation":"Developer"},
+{_id:4,"empname":"Sonu","salary":43000,"designation":"Accountant"},
+{_id:5,"empname":"Akhila","salary":45000,"designation":"Manager"},
+{_id:6,"empname":"Abhishek","salary":30000,"designation":"Developer"},
+{_id:7,"empname":"Jitesh","salary":60000,"designation":"Owner"},
+{_id:8,"empname":"Deepa","salary":30000,"designation":"Accountant"},
+{_id:9,"empname":"Joe","salary":30000,"designation":"Developer"},
+{_id:10,"empname":"Sam","salary":40000,"designation":"Supplier"},]);
+
+db.Staff.find({})
+
+a)Display all documents in Staff and display only empid and designation.db
+db.Staff.find({},{_id:10,empid:true,designation:true})
+
+b)Sort the documents in descending order of Salary
+db.Staff.find({}).sort({"salary":-1})
+
+c) Display employee with designation with “Manager” or salary greater than Rs. 50,000/-.
+db.Staff.find({$or:[{"designation":"Manager"},{"salary":{$gt:50000}}]})
+
+d)Update the salary of all employees with designation as “Accountant” to Rs.45000.
+db.Staff.updateMany({"designation":"Accountant"},{$set:{"salary":45000}})
+db.Staff.find({})
+
+e)Remove the documents of employees whose salary is greater than Rs100000.
+db.Staff.remove({ "salary" : { $gt : 100000 }})
+
+2)Create a database Institution. Create a collection Student and Insert ten documents in it with fields: RollNo, 
+Name, Class and TotalMarks (out of 500).
+1.	Display all documents in Student.
+2.	Sort the documents in descending order of TotalMarks.
+3.	Display students of class “MSc” or marks greater than 400.
+4.	Remove all the documents with TotalMarks<200
+Code and Output:
+use Institution
+db.Student.insertMany([
+{"rollno":1,"name":"Sowmya","class":"BSc","totalmarks":450},
+{"rollno":2,"name":"Sanjana","class":"BSc","totalmarks":400},
+{"rollno":3,"name":"Trupti","class":"MSc","totalmarks":499},
+{"rollno":4,"name":"Akhila","class":"BSc","totalmarks":450},
+{"rollno":5,"name":"Sonu","class":"BSc","totalmarks":490},
+{"rollno":6,"name":"Abhishek","class":"MSc","totalmarks":350},
+{"rollno":7,"name":"Afzal","class":"BSc","totalmarks":190},
+{"rollno":8,"name":"Chandler","class":"BSc","totalmarks":300},
+{"rollno":9,"name":"Mon","class":"MSc","totalmarks":150},
+{"rollno":10,"name":"Nikita","class":"BSc","totalmarks":100}]) 
+
+a)Display all documents in Student.
+db.Student.find({})
+db.Student.find({}).pretty()
+
+b)Sort the documents in descending order of TotalMarks.
+db.Student.find({}).sort({"totalmarks":-1}) 
+
+c)Display students of class “MSc” or marks greater than 400.
+db.Student.find({$or:[{"class":"MSc"},{"totalmarks":{$gt:400}}]})
+
+d) Remove all the documents with TotalMarks<200
+db.Student.remove({"TotalMarks":{$ls:200}})
+
+
+
+EXTRA:
+
+db.collection.createIndex(
+  {
+      "a": 1
+  },
+  {
+      unique: true,
+      sparse: true,
+      expireAfterSeconds: 3600
+  }
+)
+CRUD operations create, read, update, and delete documents.
+
+• db.collection.find()
+Select All Documents in a Collection
+To select all documents in the collection, pass an empty document as the query filter 
+parameter to the find method. The query filter parameter determines the select criteria:
+
+-db.inventory.find( {} )
+
+The following example retrieves all documents in the inventory collection where 
+the status equals "A" and qty is less than ($lt) 30:
+-db.inventory.find( { status: "A", qty: { $lt: 30 } } )
+
+Using the $or operator, you can specify a compound query that joins each clause with 
+a logical OR conjunction so that the query selects the documents in the collection that 
+match at least one condition.
+The following example retrieves all documents in the collection where 
+the status equals "A" or qty is less than ($lt) 30:
+-db.inventory.find( { $or: [ { status: "A" }, { qty: { $lt: 30 } } ] } )
+
+Specify AND as well as OR Conditions
+In the following example, the compound query document selects all documents in the 
+collection where the status equals "A" and either qty is less than ($lt) 30 or item starts 
+with the character p:
+db.inventory.find( {
+ status: "A",
+ $or: [ { qty: { $lt: 30 } }, { item: /^p/ } ]
+} )
+Update Operations
+Update operations modify existing documents in a collection. MongoDB provides the 
+following methods to update documents of a collection:
+• db.collection.updateOne() New in version 3.2
+• db.collection.updateMany() New in version 3.2
+• db.collection.replaceOne() New in version 3.2
+
+Following example will set the new title 'New MongoDB Tutorial' of the documents 
+whose title is 'MongoDB Overview' 
+>db.mycol.update({'title':'MongoDB Overview'},{$set:{'title':'New 
+MongoDB Tutorial'}}) >db.mycol.find() 
+
+Following example will remove all the documents whose title is 'MongoDB Overview' 
+>db.mycol.remove({'title':'MongoDB Overview'}) 
+>db.mycol.find() 
+
+Remove only one 
+if there are multiple records and you want to delete only first record, then set justOne 
+parameter in remove() method 
+>db.COLLECTION_NAME.remove(DELETION_CRITERIA,1)
+
+Remove All documents 
+If you don't specify deletion criteria, then mongodb will delete whole documents from 
+the collection. This is equivalent of SQL's truncate command. 
+>db.mycol.remove() 
+>db.mycol.find()
+
+Map-reduce is a data processing paradigm for condensing large volumes of data into 
+useful aggregated results. To perform map-reduce operations, MongoDB provides 
+the mapReduce database command.
+
