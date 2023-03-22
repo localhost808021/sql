@@ -1,0 +1,402 @@
+PRACNO1:
+Write a program to demonstrate bitwise operation.
+def intersect(p1, p2):
+    i, j = 0, 0
+    answer = []
+    while i < len(p1) and j < len(p2):
+        if p1[i] == p2[j]:
+            answer.append(p1[i]) 
+            i += 1
+            j += 1
+        elif p1[i]< p2[j]:
+            i += 1
+        else:
+            j += 1
+    return answer
+
+print(intersect([1, 2, 3, 11, 21, 31, 56], [3, 6, 9, 11, 31, 40, 46, 50]))
+
+PRACNO2:
+PageRank (PR) is an algorithm used by Google Search to rank websites in their search engine results. 
+PageRank was named after Larry Page, one of the founders of Google. 
+PageRank is a way of measuring the importance of website pages.
+The PageRank algorithm outputs a probability distribution used to represent the likelihood that a person randomly 
+clicking on links will arrive at any particular page. 
+PageRank can be calculated for collections of documents of any size.
+Implement Page Rank Algorithm:
+CODE:
+package com.mycompany.irprac2;
+import java.util.Scanner;
+
+public class PageRanking
+{
+    int path[][] = new int [10][10];
+    double pagerank [] = new double [10];
+    public void calc(double totalNodes) 
+    {
+        double InitialPageRank;
+        double OutgoingLinks = 0;
+        double DampingFactor = 0.85;
+        double TempPageRank [] = new double [10];
+        int ExternalNodeNumber;
+        int InternalNodeNumber;
+        int k = 1;
+        int iteration_step = 1;
+        InitialPageRank = 1 / totalNodes;
+        System.out.println("Total Number of Nodes: "+totalNodes+" Initial PageRank of all Nodes: "+InitialPageRank);
+        
+        for (k=1; k <= totalNodes; k++)
+            
+            {
+                
+                this.pagerank[k] = InitialPageRank;
+            }
+        
+        System.out.println("Initial Page Rank Values, 0th Step");
+        for (k=1; k<=totalNodes; k++)
+               {
+                   
+                    System.out.println("Page Rank of "+k+" is: "+this.pagerank[k]);
+                }
+        
+        while (iteration_step<=2)
+            
+            {
+                
+                for (k=1; k<=totalNodes; k++)
+                    
+                    {
+                        TempPageRank[k] = this.pagerank[k];
+                        this.pagerank[k] = 0;
+                    }
+                
+                for (InternalNodeNumber = 1; InternalNodeNumber<= totalNodes; InternalNodeNumber++)
+                    {
+                    for (ExternalNodeNumber = 1; ExternalNodeNumber<= totalNodes; ExternalNodeNumber++)
+                        {
+                            
+                            if (this.path[ExternalNodeNumber][InternalNodeNumber] == 1)
+                            {
+                                
+                                k=1;
+                                OutgoingLinks=0;
+                                
+                                while (k <= totalNodes)
+                                {
+                                     if (this.path[ExternalNodeNumber][k] == 1)
+                                         
+                                        {
+                                            OutgoingLinks = OutgoingLinks + 1;
+                                        }
+                                     
+                                        k = k+1;
+                                 }
+                                
+                                
+                                this.pagerank[InternalNodeNumber] += TempPageRank[ExternalNodeNumber]*(1/OutgoingLinks);
+                                
+                                
+                                
+                                    }
+                            
+                            }
+                    
+                    }
+                
+                System.out.println("After " +iteration_step+ "th step");
+                for (k = 1; k <= totalNodes; k++)
+                    
+                    System.out.println("Page Rank of " +k+ " is " + this.pagerank[k]);
+                
+                  iteration_step = iteration_step + 1;
+                    }
+        for (k = 1; k <= totalNodes; k++)
+        {
+this.pagerank[k] = (1 - DampingFactor) + DampingFactor * this.pagerank[k];
+        }
+System.out.println("Final Page Rank: ");
+        for (k = 1; k <= totalNodes; k++)
+        {
+System.out.println("Page Rank of " +k+ " is: " +this.pagerank[k]);
+        }
+    }
+
+    public static void main(String args[])
+    {
+        int nodes, i, j;
+        Scanner in = new Scanner(System.in);
+System.out.println("Enter the number of webpages ");
+        nodes = in.nextInt();
+PageRanking p = new PageRanking();
+System.out.println("Enter the adjacency matrix with 1 -> PATH & 0 -> NO PATH between two webpages: ");
+        for (i = 1; i<= nodes; i++)
+        {
+            for (j = 1; j <= nodes; j++)
+            {
+p.path[i][j] = in.nextInt();
+                if (j == i)
+p.path[i][j] = 0;
+            }
+        }
+p.calc(nodes);
+    }
+}
+
+PRACNO3:
+Implement Dynamic programming algorithm for computing the edit distance between strings s1 and s2.
+CODE:
+def editDistance(s1,s2,m,n):
+    if m==0:
+        return n
+    if n==0:
+        return m
+    if(s1[m-1]==s2[n-1]):
+        return editDistance(s1,s2,m-1,n-1)
+
+    return 1+min(editDistance(s1,s2,m,n-1),editDistance(s1,s2,m-1,n),editDistance(s1,s2,m-1,n-1))
+
+s1="network"
+s2="cats"
+editDistance(s1,s2,len(s1),len(s2))
+
+PRACNO4:
+Write a program to Compute Similarity between two text documents
+CODE:
+package com.mycompany.irprac_4;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+public class IRPRAC_4 
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader reader1 = new BufferedReader (new FileReader("C:/Users/Lenoo/OneDrive/Documents/IR/text1.txt"));
+        BufferedReader reader2 = new BufferedReader (new FileReader("C:/Users/Lenoo/OneDrive//Documents/IR/text2.txt"));
+        String line1 = reader1.readLine();
+        String line2 = reader2.readLine();
+        boolean areEqual = true;
+        int lineNum = 1;
+        while (line1 != null || line2 != null)
+        {
+            if (line1 == null || line2 ==null)
+            {
+                areEqual = false;
+                break;
+            }
+            else if (! line1.equalsIgnoreCase(line2))
+            {
+                areEqual = false;
+                break;
+            }
+            line1 = reader1.readLine();
+            line2 = reader2.readLine();
+            lineNum++;
+        }
+        if (areEqual)
+        {
+            System.out.println("Two files have same content");
+        }
+        else
+        {
+            System.out.println("Two files have different content. They differ at line " + lineNum);
+            System.out.println("File1 has "+line1+" and file2 has "+line2+" at line "+lineNum);
+        }
+        reader1.close();
+        reader2.close();
+    }
+}
+
+PRACNO5:
+Write a program for Pre-processing of a Text Document: stop word removal.
+CODE:
+1.
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+eg=input("Enter any sentence")
+stop_words=set(stopwords.words('english'))
+tokens=word_tokenize(eg)
+#filtered=[w for w in tokens if not w instop_words]
+filtered=[]
+for w in tokens:
+    if w not in stop_words:
+        filtered.append(w)
+print("tokens:",tokens)
+print("filtered:",filtered)
+2.
+import nltk
+
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+f=open("text.txt","r")
+for line in f:
+    print(line)
+stop_words=set(stopwords.words('english'))
+tokens=word_tokenize(line)
+#filtered=[w for w in tokens if not w instop_words]
+filtered=[]
+for w in tokens:
+    if w not in stop_words:
+        filtered.append(w)
+print("tokens:",tokens)
+print("filtered:",filtered)
+
+TEXT.TXT:
+For those writers who have writers' block, this can be an excellent way to take a step to crumbling those walls. 
+By taking the writer away from the subject matter that is causing the block, a random sentence may allow them to 
+see the project they're working on in a different light and perspective. Sometimes all it takes is to get that first 
+sentence down to help break the block.
+It can also be successfully used as a daily exercise to get writers to begin writing. Being shown a random sentence and 
+using it to complete a paragraph each day can be an excellent way to begin any writing session.
+Random sentences can also spur creativity in other types of projects being done. If you are trying to come up with a 
+new concept, a new idea or a new product, a random sentence may help you find unique qualities you may not have considered. 
+Trying to incorporate the sentence into your project can help you look at it in different and unexpected ways than you would 
+normally on your own.
+
+PRACNO6:
+Write a program for mining Twitter to identify tweets for a specific period and identify trends and named entities
+CODE:
+import re
+import tweepy
+from tweepy import OAuthHandler
+from textblob import TextBlob
+class TwitterClient(object):
+    def __init__(self):
+        consumer_key = 'LlnXUxe64nBJQs0vCFPTj6Vkx'
+        consumer_secret ='PyhmahYOAONBaDBdw5U2mnIXCw6XdGKza0kgw35Dl86du5EegD'
+        access_token = '4313447914-5qh3YuUbTegPvjTMhfmeQONudsQgBDVJtHuijHB'
+        access_token_secret ='DBizwMGRuSemXtq3HbOaatBHa7rFXUywofhwYQY91Zj9N'    
+        try:
+            self.auth = OAuthHandler(consumer_key,consumer_secret)
+            self.auth.set_access_token(access_token,access_token_secret)
+            self.api = tweepy.API(self.auth)                            
+        except:
+            print("Error: Authentication Failed")
+                                           
+    def clean_tweet(self, tweet):
+         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z\t])|(\w+:\/\/\S+)", " ", tweet).split())
+                                           
+    def get_tweet_sentiment(self, tweet):
+        analysis = TextBlob(self.clean_tweet(tweet))
+        if analysis.sentiment.polarity > 0:
+            return 'positive'
+        else:
+            return 'negative'
+                                           
+    def get_tweets(self, query, count = 10):
+        tweets = []    
+        try:
+            fetched_tweets = self.api.search_tweets(q = query,count = count)
+            for tweet in fetched_tweets:
+                parsed_tweet = {}
+                parsed_tweet['text'] = tweet.text
+                parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
+                if tweet.retweet_count > 0:
+                    if parsed_tweet not in tweets:
+                        tweets.append(parsed_tweet)
+                    else:
+                        tweets.append(parsed_tweet)
+            return tweets                       
+        except tweepy.TweepError as e:
+                print("Error: "+ str(e))
+                                           
+def main():
+    api = TwitterClient()
+    tweets = api.get_tweets(query = 'Corona Virus', count =50)
+    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+    print("Positive tweets percentage: {}%".format(100*len(ptweets)/len(tweets)))
+    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+    print("Negative tweets percentage: {}%".format(100*len(ntweets)/len(tweets)))
+    print("\n\nPositive tweets:")
+    for tweet in ptweets[:10]:
+        print(tweet['text'])
+    print("\n\nNegative tweets:")
+    for tweet in ntweets[:10]:
+        print(tweet['text'])
+                                           
+if __name__ == "__main__":
+    main()
+
+2.
+pip install python-twitter
+
+PRACNO7:
+Write a program to implement simple web crawler.
+CODE:
+pip install parsel
+import requests
+from parsel import Selector
+import time
+start= time.time()
+response = requests.get('http://recurship.com/')
+selector = Selector(response.text)
+href_links = selector.xpath('//a/@href').getall()
+image_links = selector.xpath('//img/@src').getall()
+
+
+print('*************************************href_links***************************************************')
+print(href_links)
+
+print('*************************************href_links*************************************************** ')
+
+
+print('****************************************image_links***********************************************')
+print(image_links)
+
+print('**************************************image_links*************************************************')
+end=time.time()
+print("Time Taken in seconds: ",(end-start))
+
+PRACNO8:
+Write a program to parse the Xml file
+CODE:
+#CORRECTONE
+
+import csv 
+import requests
+import xml.etree.ElementTree as ET
+
+def loadRSS():
+    url="https://timesofindia.indiatimes.com/rssfeeds/1081479906.cms" 
+    resp=requests.get(url)
+    with open('topnewsfeed.xml','wb') as f:
+        f.write(resp.content)
+
+def parseXML(xmlfile): 
+    tree=ET.parse(xmlfile) 
+    root=tree.getroot() 
+    newsitems=[]
+    for item in root.findall('./channel/item'): 
+        news={}
+        for child in item: 
+            if(child.text == None):
+                news[child.tag] = child.text 
+                break
+            news[child.tag] = child.text.encode("utf-8")
+ 
+        newsitems.append(news) 
+    return newsitems
+
+def savetoCSV(newsitems,filename):
+    fields=['guid','title','pubDate','description','link','{http://purl.org/dc/ele ments/1.1/}creator', 'enclosure']
+    with open(filename,'w') as csvfile:
+        writer=csv.DictWriter(csvfile,fieldnames=fields) 
+        writer.writeheader() 
+        writer.writerows(newsitems)
+
+
+def main():
+    loadRSS()
+    newsitems=parseXML('topnewsfeed.xml') 
+    savetoCSV(newsitems,'topnews.csv')
+
+if __name__=="__main__":
+    main()
+
+
+
+
+
