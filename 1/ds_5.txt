@@ -1,0 +1,54 @@
+Pract 5 ==============================
+import numpy as np 
+from sklearn import datasets 
+x,y,coef=datasets.make_regression(n_samples=100,n_features=1,n_informative=1,noise=10,coef=True,random_state=0) 
+#Scale feature x for exp from 0 to 20 
+x=np.interp(x,(x.min(),x.max()),(0,20))
+len(x) 
+print(x) 
+
+#Scale target y(salary) to 20000 to 150000 
+y=np.interp(y,(y.min(),y.max()),(20000,150000)) 
+len(y) 
+print(y)
+
+import matplotlib.pyplot as plt 
+plt.plot(x,y,'.',label='training data') 
+plt.xlabel("Years of Experience") 
+plt.ylabel("Salary")
+plt.title("Experience VS Salary") 
+
+from sklearn.linear_model import LinearRegression 
+reg_model=LinearRegression() 
+reg_model.fit(x,y) 
+y_predicted=reg_model.predict(x) 
+plt.plot(x,y,'.',label='training data') 
+plt.xlabel("Years of Experience") 
+plt.ylabel("Salary") 
+plt.title("Experience VS Salary") 
+plt.plot(x,y_predicted,color="black")
+
+import pandas as pd 
+data={'Experience':np.round(x.flatten()),"Salary":np.round(y)} 
+df=pd.DataFrame(data) 
+df.head(10)
+
+x1=[[6.0]] 
+y1=reg_model.predict(x1) 
+print(y1) 
+
+
+Part 2=======================
+
+from sklearn.linear_model import LinearRegression 
+%matplotlib inline 
+reg_model=LinearRegression() 
+x=np.random.rand(100,1) 
+beeta0=10 beeta1=7 
+error=np.random.rand(100,1) 
+y=beeta0+beeta1*x+error 
+reg_model.fit(x,y) y_predicted=reg_model.predict(x) 
+plt.scatter(x,y,s=10) plt.xlabel("X") 
+plt.ylabel("Y") 
+plt.plot(x,y_predicted,color="black") 
+plt.show()

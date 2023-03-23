@@ -1,0 +1,219 @@
+Pract 1 ===============================
+
+!pip install wordcloud
+!pip install Wikipedia
+
+from wordcloud import WordCloud,STOPWORDS
+import matplotlib.pyplot as plt
+import wikipedia as wp
+
+result = wp.page("Data Science")
+final_result = result.content
+# print(final_result)
+
+def plot_wordcloud(wc):
+    plt.axis("off")
+    plt.figure(figsize=(10,10))
+    plt.imshow(wc)
+    plt.show()
+    
+wc=WordCloud(width=500,height=500,background_color="black",random_state=10,stopwords=STOPWORDS).generate(final_result)
+wc.to_file("ds.png")
+plot_wordcloud(wc)
+
+
+Pract 2 =======================
+#1) Html Scrapping - Use Beautiful Soup--------
+
+import pandas as pd
+from bs4 import BeautifulSoup
+from urllib.request import urlopen
+url="https://en.wikipedia.org/wiki/List_of_Asian_countries_by_area"
+page=urlopen(url)
+html_page=page.read().decode("utf-8")
+soup=BeautifulSoup(html_page,"html.parser")
+table=soup.find("table",{'class':'wikitable sortable'})
+print(table)
+
+SrNo=[]
+Country=[]
+Area=[]
+rows=table.find("tbody").find_all("tr")
+for row in rows:
+    cells=row.find_all("td")
+    if(cells):
+        SrNo.append(cells[0].get_text().strip("\n"))
+        Country.append(cells[1].get_text().strip("\n").strip("\xa0").strip('*'))
+        Area.append(cells[2].get_text().strip("\n").replace(",",""))
+df=pd.DataFrame()
+df["ID"]=SrNo
+df["Country"]=Country
+df["Area"]=Area
+print(df.head(10))
+
+
+# 2) JSON Scrapping----------
+import json
+from urllib.request import urlopen
+import pandas as pd
+page = urlopen("https://api.github.com/users?since=100")
+json = json.loads(page.read())
+login = []
+id = []
+avatar = []
+
+for item in json:
+    if "login" in item.keys():
+        login.append(item['login'])
+    else:
+        login.append("NA")
+        
+    if "id" in item.keys():
+        id.append(item['id'])
+    else:
+        id.append("NA")
+        
+    if 'avatar_url' in item.keys():
+        avatar.append(item['avatar_url'])
+    else:
+        avatar.append("NA")
+df = pd.DataFrame()
+df["Login"] = login
+df["ID"] = id
+df['Avatar'] = avatar
+df.head(10)
+
+Pract 3 =======================
+
+df=read.csv("mtcars.csv")
+View(df)
+
+str(df) #provides the structure
+dim(df) #provides the dimension
+
+names(df)
+row.names(df)=df$model #assign variable model as row names
+row.names(df)
+df=df[,-1] #removes first column from data
+
+library("dplyr")
+#select function
+df1=select(df,mpg:hp)
+df1= df %>% select(mpg:hp) #another method for selecting columns
+View(df1)
+df1=df %>% select(c(mpg,hp,wt))
+View(df1)
+
+#filter function
+df2=df %>% filter(gear==4 | mpg>20) %>% select(c(mpg,hp,wt,gear))
+View(df2)
+
+#arrange fumction
+df3=df %>% arrange(cyl,desc(mpg)) #arranging the data on the basis of cylinder
+                                  #in descending order of mpg
+View(df3)
+
+#rename function
+df4=df %>% rename(MilesPerGallon=mpg,Displacement=disp)
+View(df4)
+
+#mutate function
+df5=df %>% mutate(Power=hp*wt) #product of hp and wt in new Power column
+View(df5)
+
+#group_by and summarise function
+df$cyl=as.factor(df$cyl) #changing data in factor
+df6=df %>% group_by(df$cyl) %>% summarise(n=n(),mean_mpg=mean(mpg))
+#n() functions provides no. of inputs of each type of cyl 
+df6
+
+#grouping df by gear and display no. of entries for each gear, mean of mpg, mean of disp
+#and mean of wt
+df$gear=as.factor(df$gear)
+df7=df %>% group_by(df$gear) %>% summarise(n=n(),mean_mpg=mean(mpg),mean_disp=mean(disp),mean_wt=mean(wt))
+df7
+
+#Data Visualizations
+#Histogram
+#to generate histogram
+hist(df$mpg,main="Histogram of MPG(mtcars)",col="lightgreen",border="darkorange",xlab="MilesPerGallon")
+
+#Barplot
+df$cyl=as.factor(df$cyl) #convert column into factor before barplot
+table(df$cyl) #used to get frequency of every category in cyl
+barplot(table(df$cyl))
+
+#Boxplot - to get complete summary of columns(mean, median,quantities etc)
+summary(df$mpg)
+boxplot(df$mpg)
+
+#Scatter plot - represents relation btw one or more variables
+plot(df$mpg~df$disp) #or plot(mpg~disp,df)
+
+
+Pract 4 ================================
+
+import pandas as pd 
+titanic = pd.read_csv("train.csv") 
+titanic.head() 
+
+titanic.info() 
+
+titanic.describe() 
+
+titanic.isnull().sum() 
+
+titanic_cleaned = titanic.drop(['PassengerId','Name','Ticket','Fare','Cabin'],axis=1) 
+titanic_cleaned.info() 
+
+import seaborn as sns 
+import matplotlib.pyplot as plt 
+%matplotlib inline #The %matplotlib inline magic command is used in Jupyter notebooks and JupyterLab to display plots within the notebook interface
+sns.catplot(x="Sex",hue="Survived",kind="count",data=titanic_cleaned) #The kind parameter specifies that a count plot should be created.
+
+titanic_cleaned.groupby(['Sex','Survived'])['Survived'].count()
+
+#unstack method to reshape the data into a two-dimensional table, with Sex as the row index and Survived as the column index.
+group1 = titanic_cleaned.groupby(['Sex','Survived']) 
+gender_survived = group1.size().unstack() 
+gender_survived 
+sns.heatmap(gender_survived,annot=True,fmt="d") #d is integer annotation
+#The annot=True parameter specifies that the numerical values should be displayed in the heatmap. 
+#The fmt="d" parameter specifies that the numerical values should be displayed as integers.
+
+group2 = titanic_cleaned.groupby(["Pclass","Survived"]) 
+pclass_survived = group2.size().unstack() 
+pclass_survived 
+sns.heatmap(pclass_survived,annot=True,fmt="d") #d is integer annotation
+
+sns.violinplot(x="Sex",y="Age",hue="Survived",data=titanic_cleaned,split=True) #split is on the basis of x axis
+
+print("Oldest person on board: ",titanic_cleaned["Age"].max()) 
+
+print("Youngest person on board: ",titanic_cleaned["Age"].min())
+
+print("Average age of people on board: ",titanic_cleaned["Age"].mean()) 
+
+titanic_cleaned.isnull().sum()
+
+def impute(cols): 
+    Age=cols[0] 
+    Pclass=cols[1] 
+    if pd.isnull(Age): 
+        if Pclass==1: 
+            return 38 
+        elif Pclass==2: 
+            return 29 
+        else: 
+            return 24 
+    else: 
+        return Age 
+titanic_cleaned["Age"]=titanic_cleaned[["Age","Pclass"]].apply(impute,axis=1) # apply function is a single line looping statement titanic_cleaned.isnull().sum()
+
+
+titanic_cleaned.isnull().sum() 
+
+titanic_cleaned.corr(method='pearson')
+
+sns.heatmap(titanic_cleaned.corr(method="pearson"),annot=True,vmax=1)
+

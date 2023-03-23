@@ -1,0 +1,346 @@
+Pract1========================
+
+#Pract 1
+def intersect(p1, p2):
+    i, j = 0, 0
+    answer = []
+    while i < len(p1) and j < len(p2):
+        if p1[i] == p2[j]:
+            answer.append(p1[i]) 
+            i += 1
+            j += 1
+        elif p1[i]< p2[j]:
+            i += 1
+        else:
+            j += 1
+    return answer
+
+print(intersect([1, 2, 3, 11, 21, 31, 56], [3, 6, 9, 11, 31, 40, 46, 50]))
+
+
+Pract 2===========================
+
+// n = number of nodes
+// d = damping factor (usually 0.85)
+// I = initial page rank (usually 1/n)
+// itr = number of iteration
+
+// Example matrix
+// # A B C
+// A 0 0 1
+// B 1 0 0
+// C 1 1 0
+
+// Formula = (1-d) + d*(SummationOfAll(PR(in)/Num(out of in)...))
+
+import java.util.*;
+
+public class P2 {
+    public int path[][] = new int[10][10];
+    public double pagerank[] = new double[10];
+
+    public void calc(int n) {
+        double d = 0.85;
+        double I = 1.0 / n;
+        int itr = 1;
+        // Storing all the number of outlinks initially, to reduce complexity
+        int numOfOutlinks[] = new int[10];
+        for (int i = 1; i <= n; i++) {
+            int outlinks = 0;
+            for (int j = 1; j <= n; j++) {
+                if (path[j][i] == 1) {
+                    outlinks++;
+                }
+            }
+            numOfOutlinks[i] = outlinks;
+        }
+
+        // Iteration 0
+        System.out.println("\nTotal Number of Nodes: " + n + "\tInitial PageRank of All Nodes: " + I);
+        System.out.println("\nAfter Step 0: ");
+        for (int k = 1; k <= n; k++) {
+            pagerank[k] = I;
+            System.out.printf("Page Rank of " + k + " is: \t" + pagerank[k] + "\n");
+        }
+
+        // Iteration untill any number... in our case 2
+        while (itr <= 2) {
+            for (int i = 1; i <= n; i++) {
+                double innerCal = 0;
+                for (int j = 1; j <= n; j++) {
+                    if (path[i][j] == 1) {
+                        innerCal += pagerank[j] / numOfOutlinks[j];
+                    }
+                }
+                pagerank[i] = (1 - d) + d * (innerCal);
+            }
+            System.out.printf("\nAfter Step " + itr + ": \n");
+            for (int k = 1; k <= n; k++) {
+                System.out.printf("Page Rank of " + k + " is: \t" + pagerank[k] + "\n");
+            }
+            itr++;
+        }
+
+    }
+
+    public static void main(String[] args) {
+        int nodes, i, j;
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of WebPages: ");
+        nodes = sc.nextInt();
+        P2 p = new P2();
+        System.out.println("Enter the Adjacency Matrix with 1->PATH & 0->NO PATH Between two WebPages: ");
+        for (i = 1; i <= nodes; i++) {
+            for (j = 1; j <= nodes; j++) {
+                p.path[i][j] = sc.nextInt();
+                if (i == j) {
+                    p.path[i][j] = 0;
+                }
+            }
+        }
+        p.calc(nodes);
+    }
+}
+
+
+Pract 3 ====================================
+
+# Pract 3- Sanjana Dubey
+def editDistance(s1,s2,m,n):
+    if m==0:
+        return n
+    if n==0:
+        return m
+    if(s1[m-1]==s2[n-1]):
+        return editDistance(s1,s2,m-1,n-1)
+
+    return 1+min(editDistance(s1,s2,m,n-1),editDistance(s1,s2,m-1,n),editDistance(s1,s2,m-1,n-1))
+
+s1="network"
+s2="cats"
+editDistance(s1,s2,len(s1),len(s2))
+
+
+Pract 4 ========================================
+
+package com.mycompany.irprac_4;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+public class IRPRAC_4 
+{
+ public static void main(String[] args) throws IOException
+ {
+ BufferedReader reader1 = new BufferedReader (new 
+FileReader("C:/Users/Lenoo/Documents/IR/text1.txt"));
+ BufferedReader reader2 = new BufferedReader (new 
+FileReader("C:/Users/Lenoo/Documents/IR/text2.txt"));
+ String line1 = reader1.readLine();
+ String line2 = reader2.readLine();
+ boolean areEqual = true;
+ int lineNum = 1;
+ while (line1 != null || line2 != null)
+ {
+ if (line1 == null || line2 ==null)
+ {
+ areEqual = false;
+ break;
+ }
+ else if (! line1.equalsIgnoreCase(line2))
+ {
+ areEqual = false;
+ break;
+ }
+ line1 = reader1.readLine();
+ line2 = reader2.readLine();
+ lineNum++;
+ }
+ if (areEqual)
+ {
+ System.out.println("Two files have same content");
+ }
+ else
+ {
+ System.out.println("Two files have different content. They differ at line " + 
+lineNum);
+ System.out.println("File1 has "+line1+" and file2 has "+line2+" at line 
+"+lineNum);
+ }
+ reader1.close();
+ reader2.close();
+ }
+}
+
+Pract 5 ======================================
+
+# Pract 5
+import nltk
+nltk.download('stopwords')
+nltk.download('punkt')
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+eg=input("Enter any sentence")
+stop_words=set(stopwords.words('english'))
+tokens=word_tokenize(eg)
+#filtered=[w for w in tokens if not w instop_words]
+filtered=[]
+for w in tokens:
+    if w not in stop_words:
+        filtered.append(w)
+print("tokens:",tokens)
+print("filtered:",filtered)
+
+
+
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+f=open("text.txt","r")
+for line in f:
+    print(line)
+stop_words=set(stopwords.words('english'))
+tokens=word_tokenize(line)
+#filtered=[w for w in tokens if not w instop_words]
+filtered=[]
+for w in tokens:
+    if w not in stop_words:
+        filtered.append(w)
+print("tokens:",tokens)
+print("filtered:",filtered)
+
+
+
+Pract 6 ====================================
+
+# Pract - 6 
+import re
+import tweepy
+from tweepy import OAuthHandler
+from textblob import TextBlob
+class TwitterClient(object):
+    def __init__(self):
+        consumer_key = 'LlnXUxe64nBJQs0vCFPTj6Vkx'
+        consumer_secret ='PyhmahYOAONBaDBdw5U2mnIXCw6XdGKza0kgw35Dl86du5EegD'
+        access_token = '4313447914-5qh3YuUbTegPvjTMhfmeQONudsQgBDVJtHuijHB'
+        access_token_secret ='DBizwMGRuSemXtq3HbOaatBHa7rFXUywofhwYQY91Zj9N'    
+        try:
+            self.auth = OAuthHandler(consumer_key,consumer_secret)
+            self.auth.set_access_token(access_token,access_token_secret)
+            self.api = tweepy.API(self.auth)                            
+        except:
+            print("Error: Authentication Failed")
+                                           
+    def clean_tweet(self, tweet):
+         return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z\t])|(\w+:\/\/\S+)", " ", tweet).split())
+                                           
+    def get_tweet_sentiment(self, tweet):
+        analysis = TextBlob(self.clean_tweet(tweet))
+        if analysis.sentiment.polarity > 0:
+            return 'positive'
+        else:
+            return 'negative'
+                                           
+    def get_tweets(self, query, count = 10):
+        tweets = []    
+        try:
+            fetched_tweets = self.api.search_tweets(q = query,count = count)
+            for tweet in fetched_tweets:
+                parsed_tweet = {}
+                parsed_tweet['text'] = tweet.text
+                parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
+                if tweet.retweet_count > 0:
+                    if parsed_tweet not in tweets:
+                        tweets.append(parsed_tweet)
+                else:
+                    tweets.append(parsed_tweet)
+            return tweets                       
+        except tweepy.TweepError as e:
+                print("Error: "+ str(e))
+                                           
+def main():
+    api = TwitterClient()
+    tweets = api.get_tweets(query = 'Corona Virus', count =50)
+    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
+    print("Positive tweets percentage: {}%".format(100*len(ptweets)/len(tweets)))
+    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
+    print("Negative tweets percentage: {}%".format(100*len(ntweets)/len(tweets)))
+    print("\n\nPositive tweets:")
+    for tweet in ptweets[:10]:
+        print(tweet['text'])
+    print("\n\nNegative tweets:")
+    for tweet in ntweets[:10]:
+        print(tweet['text'])
+                                           
+if __name__ == "__main__":
+    main()
+
+
+Pract 7 ===================================
+
+pip install parsel
+
+# Pract-7
+import requests
+from parsel import Selector
+import time
+start= time.time()
+response = requests.get('http://recurship.com/')
+selector = Selector(response.text)
+href_links = selector.xpath('//a/@href').getall()
+image_links = selector.xpath('//img/@src').getall()
+
+
+print('*************************************href_links***************************************************')
+print(href_links)
+
+print('*************************************href_links*************************************************** ')
+
+
+print('****************************************image_links***********************************************')
+print(image_links)
+
+print('**************************************image_links*************************************************')
+end=time.time()
+print("Time Taken in seconds: ",(end-start)
+
+
+Pract 8 =======================================
+
+import csv
+import requests
+import xml.etree.ElementTree as ET
+
+
+def loadRSS():
+    url = "https://timesofindia.indiatimes.com/rssfeeds/1081479906.cms"
+    resp = requests.get(url)
+    with open('topnewsfeed.xml', 'wb') as f:
+        f.write(resp.content)
+
+
+def parseXML(xmlfile):
+    tree = ET.parse(xmlfile)
+    root = tree.getroot()
+    newsitems = []
+    fields = ['guid', 'title', 'pubDate', 'description', 'link']
+    for item in root.findall("./channel/item"):
+        news = {}
+        for child in item:
+            if child.tag in fields and child.text is not None:
+                news[child.tag] = child.text.encode('utf8')
+        newsitems.append(news)
+    return newsitems
+
+
+def savetoCSV(newsitems, filename):
+    fields = ['guid', 'title', 'pubDate', 'description', 'link']
+    with open(filename, 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=fields)
+        writer.writeheader()
+        writer.writerows(newsitems)
+
+
+loadRSS()
+newsitems = parseXML('topnewsfeed.xml')
+savetoCSV(newsitems, 'topnews.csv')
+print("Success")

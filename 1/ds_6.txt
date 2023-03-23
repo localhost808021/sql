@@ -1,0 +1,45 @@
+#Pract 6
+
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import sklearn 
+boston=pd.read_csv("Boston.csv") 
+boston.head() 
+
+
+boston.info() 
+
+
+boston=boston.drop(columns="Unnamed: 0") 
+boston.head() 
+
+
+##All the rows from 0 to 12 will be retrive 
+boston_x=pd.DataFrame(boston.iloc[:,:13])
+
+
+##only the last column will be removed 
+boston_y=pd.DataFrame(boston.iloc[:,-1])
+
+
+from sklearn.model_selection import train_test_split 
+X_train,X_test,Y_train,Y_test=train_test_split(boston_x,boston_y,test_size=0.3) 
+print("xtrain shape",X_train.shape) 
+print("ytrain shape",Y_train.shape) 
+print("xtest shape",X_test.shape) 
+print("ytest shape",Y_test.shape) 
+
+
+from sklearn.linear_model import LinearRegression 
+regression=LinearRegression() 
+regression.fit(X_train,Y_train) 
+Y_pred_linear=regression.predict(X_test) 
+Y_pred_df=pd.DataFrame(Y_pred_linear,columns=["Predicted"]) 
+Y_pred_df.head()
+
+
+plt.scatter(Y_test,Y_pred_linear,c="green") 
+plt.xlabel("Actual Price(medv)") 
+plt.ylabel("Predicted Price") 
+plt.title("Actual vs predicted Price ") 
+plt.show 

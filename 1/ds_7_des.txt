@@ -1,0 +1,46 @@
+Decision tree=================
+
+titanic = read.csv("train.csv")
+View(titanic)
+
+dim(titanic)
+
+library(dplyr)
+
+clean_titanic = titanic %>% select(-c("Cabin","Ticket","Fare","Name")) #deselecting the specified columns
+dim(clean_titanic)
+View(clean_titanic)
+
+
+clean_titanic = clean_titanic %>% mutate(Pclass = factor(Pclass, levels = c(1,2,3),labels = c("Upper","Middle","Lower")))
+View(clean_titanic)
+
+
+clean_titanic = na.omit(clean_titanic) #na.omit() function removes rows with missing values from a data frame.
+View(clean_titanic)
+
+dim(clean_titanic)
+
+dt = sort(sample(nrow(clean_titanic),nrow(clean_titanic)*0.7)) #generates a random sample of 70% of the row indices of the clean_titanic data frame. 
+train_titanic = clean_titanic[dt,]
+test_titanic = clean_titanic[-dt,]
+dim(test_titanic)
+dim(train_titanic)
+
+
+library(rpart)
+library(rpart.plot)
+titanic_model=rpart(Survived~.,data = train_titanic,method = "class")
+rpart.plot(titanic_model,extra = 106)
+
+
+predict_unseen = predict(titanic_model, test_titanic, type = "class")
+predict_unseen 
+
+
+library(caret)
+test_titanic$Survived = as.factor(test_titanic$Survived)
+con_mat = confusionMatrix(test_titanic$Survived,predict_unseen)
+con_mat
+
+

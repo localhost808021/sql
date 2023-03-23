@@ -1,0 +1,54 @@
+show dbs 
+
+use Institution 
+
+db.Staff.insertMany([{ empid: 1, empname: "John Doe", salary: 50000, designation: "Manager" },{ empid: 2, empname: "Jane Smith", salary: 40000, designation: "Assistant Manager" },{ empid: 3, empname: "Bob Johnson", salary: 30000, designation: "Supervisor" }]) 
+
+db.Staff.find({},{empid:1,designation:1,_id:0}) 
+
+db.Staff.find({}).sort({salary:-1}) 
+
+db.Staff.find({$or: [{designation: "Manager"}, {salary: {$gt: 50000}}]}) 
+
+db.Staff.updateMany({designation: "Accountant"}, {$set: {salary: 45000}}) 
+
+db.Staff.updateOne({empid: 2}, {$set: {designation: "Accountant"}}) 
+
+db.Staff.find({}).sort({salary:-1}) 
+
+db.Staff.updateMany({designation: "Accountant"}, {$set: {salary: 45000}}) 
+
+db.Staff.find({empid:2}).pretty() 
+
+db.Staff.deleteMany({salary: {$gt: 100000}}) 
+
+db.Staff.updateMany({empid: {$in: [1, 3]}}, {$set: {salary: 100000}}) 
+
+db.Staff.deleteMany({salary: {$gt: 100000}}) 
+
+db.Staff.updateMany({empid: {$in: [1, 3]}}, {$set: {salary: 100001}}) 
+
+db.Staff.deleteMany({salary: {$gt: 100000}}) db.Staff.find() 
+
+
+==========================================================
+
+db.Student.insertMany([{RollNo: 1, Name: "John Doe", Class: "10th", TotalMarks: 450},{RollNo: 2, Name: "Jane Smith", Class: "11th", TotalMarks: 475},{RollNo: 3, Name: "Bob Johnson", Class: "9th", TotalMarks: 400},{RollNo: 4, Name: "Alice Brown", Class: "12th", TotalMarks: 490}]) 
+
+db.Student.find({}).pretty() 
+
+db.Student.find({}) 
+
+db.Student.find({}).sort({TotalMarks : -1}) 
+
+db.Student.updateMany({RollNo: {$in: [1, 3, 5]}}, {$set: {Class: "Msc"}}) 
+
+db.Student.find({}) db.Student.find({$or : [{Class : "MSc"} , {TotalMarks : {$gt : 400}}]}) 
+
+db.Student.updateMany({RollNo: {$in: [2, 4]}}, {$set: {TotalMarks: 190}}) 
+
+db.Student.find({}) 
+
+db.Student.deleteMany({TotalMarks: {$lt : 200}}) 
+
+db.Student.find({}) 
